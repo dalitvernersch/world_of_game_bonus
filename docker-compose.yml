@@ -33,6 +33,8 @@ services:
       context: .
       dockerfile: Dockerfile
     image: world-of-game-bonus-app
+    environment:
+      PATH: /directory/bin:$PATH  # Adding the desired PATH
     depends_on:
       - db
 
