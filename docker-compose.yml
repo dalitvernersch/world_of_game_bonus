@@ -34,7 +34,7 @@ services:
       dockerfile: Dockerfile
     image: world-of-game-bonus-app
     environment:
-      PATH: /directory/bin:$PATH  # Adding the desired PATH
+      PATH: "/home/dalit/.local/bin/alembic:$PATH"  # Add the desired directory to PATH
     depends_on:
       - db
 
