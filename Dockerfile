@@ -4,17 +4,17 @@ FROM python:3.8-slim
 # Set the working directory in the container
 WORKDIR /app
 
-# Copy the contents of the current directory to the working directory in the container
+# Copy the current directory contents into the container at /app
 COPY . .
 
-# Install any dependencies specified in requirements.txt
+# Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Expose the port on which your Flask app will run (assuming it's 5000)
-EXPOSE 5000
+# Make port 80 available to the world outside this container
+EXPOSE 80
 
-# Copy the Scores.txt file to the root directory of the container
-COPY Scores.txt /Scores.txt
+# Define environment variable
+ENV NAME WorldOfGamesBonus
 
-# Set the command to run your flask app
-CMD ["python", "MainScores.py"]
+# Run alembic upgrade head on container startup
+CMD ["alembic", "upgrade", "head"]
