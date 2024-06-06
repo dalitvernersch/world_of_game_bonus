@@ -16,7 +16,7 @@ pipeline {
 
         stage('Run Migrations') {
             steps {
-                sh 'docker run --rm world-of-game-app alembic upgrade head'
+                sh 'docker run --rm world-of-game-bonus-app alembic upgrade head'
             }
         }
 
@@ -43,7 +43,7 @@ pipeline {
 
                 withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_HUB_USERNAME', passwordVariable: 'DOCKER_HUB_PASSWORD')]) {
                     sh "echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_USERNAME --password-stdin"
-                    sh 'docker tag world-of-game-app $DOCKER_HUB_USERNAME/world_of_game_bonus:latest'
+                    sh 'docker tag world-of-game-bonus-app $DOCKER_HUB_USERNAME/world_of_game_bonus:latest'
                     sh 'docker push $DOCKER_HUB_USERNAME/world_of_game_bonus:latest'
                 }
             }

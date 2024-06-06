@@ -32,7 +32,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: world-of-game-app
+    image: world-of-game-bonus-app
     depends_on:
       - db
 
