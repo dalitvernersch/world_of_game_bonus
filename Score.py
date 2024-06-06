@@ -1,4 +1,6 @@
-import os
+from sqlalchemy import create_engine, Column, Integer, String, MetaData
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
 
 # Points for winning a game based on difficulty
 POINTS_OF_WINNING = {
@@ -7,32 +9,29 @@ POINTS_OF_WINNING = {
     "HARD": (7 * 3) + 5
 }
 
+DATABASE_URL = "mysql+pymysql://root:dalit@mysql/games"
+
+engine = create_engine(DATABASE_URL)
+Session = sessionmaker(bind=engine)
+Base = declarative_base()
+
+class UserScore(Base):
+    __tablename__ = 'user_scores'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    score = Column(Integer, nullable=False)
 
 class ScoreManager:
-    def __init__(self, scores_file="Scores.txt"):
-        self.scores_file = scores_file
+    def __init__(self):
+        self.session = Session()
 
     def add_score(self, difficulty):
-        # Calculate points based on difficulty
         points = POINTS_OF_WINNING.get(difficulty, 0)
 
-        # Check if scores file exists
-        if not os.path.exists(self.scores_file):
-            # Create a new scores file and write the initial score
-            with open(self.scores_file, "w") as file:
-                file.write(str(points))
+        user_score = self.session.query(UserScore).first()
+        if user_score:
+            user_score.score += points
         else:
-            # Read current score from the scores file
-            with open(self.scores_file, "r") as file:
-                current_score = int(file.read())
+            user_score = UserScore(score=points)
 
-            # Add points to the current score
-            new_score = current_score + points
-
-            # Write the new score back to the scores file
-            with open(self.scores_file, "w") as file:
-                file.write(str(new_score))
-
-# Example usage:
-# score_manager = ScoreManager()
-# score_manager.add_score("EASY")
+        self.session.add(user_score)
+        self.session.commit()

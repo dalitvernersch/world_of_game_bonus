@@ -1,16 +1,6 @@
 version: "3.7"
 
 services:
-  web:
-    build: .
-    ports:
-      - "5000:5000"
-    volumes:
-      - ./Scores.txt:/app/Scores.txt
-    environment:
-      FLASK_APP: MainScores.py
-    command: flask run --host=0.0.0.0
-
   jenkins:
     image: jenkins/jenkins:lts
     user: root
@@ -22,3 +12,14 @@ services:
       - ./jenkins:/var/jenkins_home
       - /usr/bin/docker:/usr/bin/docker
       - /var/run/docker.sock:/var/run/docker.sock
+
+  mysql:
+    image: mysql:5.7
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: dalit
+      MYSQL_DATABASE: games
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql-data:/var/lib/mysql
