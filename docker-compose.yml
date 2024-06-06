@@ -1,19 +1,42 @@
+#version: "3.7"
+#
+#services:
+#  jenkins:
+#    image: jenkins/jenkins:lts
+#    user: root
+#    container_name: jenkins
+#    ports:
+#      - "8080:8080"
+#      - "50000:50000"
+#    volumes:
+#      - ./jenkins:/var/jenkins_home
+#      - /usr/bin/docker:/usr/bin/docker
+#      - /var/run/docker.sock:/var/run/docker.sock
+#
+#  mysql:
+#    image: mysql:5.7
+#    container_name: mysql
+#    environment:
+#      MYSQL_ROOT_PASSWORD: dalit
+#      MYSQL_DATABASE: games
+#    ports:
+#      - "3306:3306"
+#    volumes:
+#      - ./mysql-data:/var/lib/mysql
+
+
 version: "3.7"
 
 services:
-  jenkins:
-    image: jenkins/jenkins:lts
-    user: root
-    container_name: jenkins
-    ports:
-      - "8080:8080"
-      - "50000:50000"
-    volumes:
-      - ./jenkins:/var/jenkins_home
-      - /usr/bin/docker:/usr/bin/docker
-      - /var/run/docker.sock:/var/run/docker.sock
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: world-of-game-app
+    depends_on:
+      - db
 
-  mysql:
+  db:
     image: mysql:5.7
     container_name: mysql
     environment:
@@ -21,5 +44,3 @@ services:
       MYSQL_DATABASE: games
     ports:
       - "3306:3306"
-    volumes:
-      - ./mysql-data:/var/lib/mysql
